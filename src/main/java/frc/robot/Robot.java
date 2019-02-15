@@ -11,9 +11,12 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.kauailabs.navx.frc.AHRS;
 import odyssey.lib.EasyDrive;
 
 /**
@@ -38,7 +41,10 @@ public class Robot extends TimedRobot {
 
   private EasyDrive m_robotDrive;
   private GenericHID m_stick;
+  private AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
+
+  
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
