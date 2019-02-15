@@ -1,33 +1,55 @@
 !!com.snobot.simulator.config.v1.SimulatorConfigV1
-mAccelerometers: []
+mAccelerometers:
+- mHandle: 200
+  mName: SPI NavX X Accel
+  mType: com.snobot.simulator.module_wrapper.BaseAccelerometerWrapper
+- mHandle: 201
+  mName: SPI NavX Y Accel
+  mType: com.snobot.simulator.module_wrapper.BaseAccelerometerWrapper
+- mHandle: 202
+  mName: SPI NavX Z Accel
+  mType: com.snobot.simulator.module_wrapper.BaseAccelerometerWrapper
 mAnalogIn: []
 mAnalogOut: []
 mDefaultI2CWrappers: {}
-mDefaultSpiWrappers: {}
+mDefaultSpiWrappers:
+  0: NavX
 mDigitalIO: []
 mEncoders: []
-mGyros: []
+mGyros:
+- mHandle: 200
+  mName: SPI NavX Yaw
+  mType: com.snobot.simulator.module_wrapper.BaseGyroWrapper
+- mHandle: 201
+  mName: SPI NavX Pitch
+  mType: com.snobot.simulator.module_wrapper.BaseGyroWrapper
+- mHandle: 202
+  mName: SPI NavX Roll
+  mType: com.snobot.simulator.module_wrapper.BaseGyroWrapper
 mPwm:
 - mHandle: 0
   mMotorModelConfig: null
   mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
     mMaxSpeed: 0.0
-  mName: Speed Controller 0
+  mName: Left 1
   mType: com.snobot.simulator.module_wrapper.wpi.WpiPwmWrapper
 - mHandle: 1
   mMotorModelConfig: null
-  mMotorSimConfig: null
-  mName: Speed Controller 1
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 0.0
+  mName: Left 2
   mType: com.snobot.simulator.module_wrapper.wpi.WpiPwmWrapper
 - mHandle: 2
   mMotorModelConfig: null
-  mMotorSimConfig: null
-  mName: Speed Controller 2
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 0.0
+  mName: Right 1
   mType: com.snobot.simulator.module_wrapper.wpi.WpiPwmWrapper
 - mHandle: 3
   mMotorModelConfig: null
-  mMotorSimConfig: null
-  mName: Speed Controller 3
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 0.0
+  mName: Right 2
   mType: com.snobot.simulator.module_wrapper.wpi.WpiPwmWrapper
 mRelays: []
 mSimulatorComponents: []

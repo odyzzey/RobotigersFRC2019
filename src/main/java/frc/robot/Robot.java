@@ -50,18 +50,13 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    Spark frontLeft = new Spark(kFrontLeftChannel);
-    Spark rearLeft = new Spark(kRearLeftChannel);
-    Spark frontRight = new Spark(kFrontRightChannel);
-    Spark rearRight = new Spark(kRearRightChannel);
-    SpeedControllerGroup left = new SpeedControllerGroup(frontLeft, rearLeft);
-    SpeedControllerGroup right = new SpeedControllerGroup(frontRight, rearRight);
+    SpeedControllerGroup leftDrive = new SpeedControllerGroup(new Spark(kFrontLeftChannel),  new Spark(kRearLeftChannel));
+    SpeedControllerGroup rightDrive = new SpeedControllerGroup(new Spark(kFrontRightChannel), new Spark(kRearRightChannel));
     // Invert the left side motors.
     // You may need to change or remove this to match your robot.
-    frontLeft.setInverted(true);
-    rearLeft.setInverted(true);
+    leftDrive.setInverted(true);
 
-    m_robotDrive = new EasyDrive(left, right);
+    m_robotDrive = new EasyDrive(leftDrive, rightDrive);
     m_stick = new XboxController(kJoystickChannel);
   }
 
