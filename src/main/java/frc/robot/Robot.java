@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import odyssey.lib.EasyDrive;
@@ -53,13 +54,14 @@ public class Robot extends TimedRobot {
     Spark rearLeft = new Spark(kRearLeftChannel);
     Spark frontRight = new Spark(kFrontRightChannel);
     Spark rearRight = new Spark(kRearRightChannel);
-
+    SpeedControllerGroup left = new SpeedControllerGroup(frontLeft, rearLeft);
+    SpeedControllerGroup right = new SpeedControllerGroup(frontRight, rearRight);
     // Invert the left side motors.
     // You may need to change or remove this to match your robot.
     frontLeft.setInverted(true);
     rearLeft.setInverted(true);
 
-    m_robotDrive = new EasyDrive(frontLeft, rearLeft, frontRight, rearRight);
+    m_robotDrive = new EasyDrive(left, right);
     m_stick = new XboxController(kJoystickChannel);
   }
 
