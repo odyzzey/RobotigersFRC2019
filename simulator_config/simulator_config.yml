@@ -1,31 +1,12 @@
 !!com.snobot.simulator.config.v1.SimulatorConfigV1
-mAccelerometers:
-- mHandle: 200
-  mName: SPI NavX X Accel
-  mType: com.snobot.simulator.module_wrapper.BaseAccelerometerWrapper
-- mHandle: 201
-  mName: SPI NavX Y Accel
-  mType: com.snobot.simulator.module_wrapper.BaseAccelerometerWrapper
-- mHandle: 202
-  mName: SPI NavX Z Accel
-  mType: com.snobot.simulator.module_wrapper.BaseAccelerometerWrapper
+mAccelerometers: []
 mAnalogIn: []
 mAnalogOut: []
 mDefaultI2CWrappers: {}
-mDefaultSpiWrappers:
-  0: NavX
+mDefaultSpiWrappers: {}
 mDigitalIO: []
 mEncoders: []
-mGyros:
-- mHandle: 200
-  mName: SPI NavX Yaw
-  mType: com.snobot.simulator.module_wrapper.BaseGyroWrapper
-- mHandle: 201
-  mName: SPI NavX Pitch
-  mType: com.snobot.simulator.module_wrapper.BaseGyroWrapper
-- mHandle: 202
-  mName: SPI NavX Roll
-  mType: com.snobot.simulator.module_wrapper.BaseGyroWrapper
+mGyros: []
 mPwm:
 - mHandle: 0
   mMotorModelConfig: null

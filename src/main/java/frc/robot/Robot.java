@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Spark;
@@ -41,7 +42,7 @@ public class Robot extends TimedRobot {
 
   private EasyDrive m_robotDrive;
   private GenericHID m_stick;
-  private AHRS ahrs = new AHRS(SPI.Port.kMXP);
+  //private AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
 
   
@@ -55,8 +56,8 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    SpeedControllerGroup leftDrive = new SpeedControllerGroup(new Spark(kFrontLeftChannel),  new Spark(kRearLeftChannel));
-    SpeedControllerGroup rightDrive = new SpeedControllerGroup(new Spark(kFrontRightChannel), new Spark(kRearRightChannel));
+    SpeedControllerGroup leftDrive = new SpeedControllerGroup(new VictorSP(kFrontLeftChannel),  new VictorSP(kRearLeftChannel));
+    SpeedControllerGroup rightDrive = new SpeedControllerGroup(new VictorSP(kFrontRightChannel), new VictorSP(kRearRightChannel));
     // Invert the left side motors.
     // You may need to change or remove this to match your robot.
     leftDrive.setInverted(true);
