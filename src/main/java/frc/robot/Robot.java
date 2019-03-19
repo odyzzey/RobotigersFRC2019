@@ -8,15 +8,17 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.CameraServer;
 
-import com.kauailabs.navx.frc.AHRS;
 import odyssey.lib.EasyDrive;
 
 /**
@@ -41,7 +43,7 @@ public class Robot extends TimedRobot {
 
   private EasyDrive m_robotDrive;
   private GenericHID m_stick;
-  private AHRS ahrs = new AHRS(SPI.Port.kMXP);
+  //private AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
 
   
@@ -55,8 +57,10 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    SpeedControllerGroup leftDrive = new SpeedControllerGroup(new Spark(kFrontLeftChannel),  new Spark(kRearLeftChannel));
-    SpeedControllerGroup rightDrive = new SpeedControllerGroup(new Spark(kFrontRightChannel), new Spark(kRearRightChannel));
+    CameraServer.getInstance().startAutomaticCapture();
+
+    SpeedControllerGroup leftDrive = new SpeedControllerGroup(new VictorSP(kFrontLeftChannel),  new VictorSP(kRearLeftChannel));
+    SpeedControllerGroup rightDrive = new SpeedControllerGroup(new VictorSP(kFrontRightChannel), new VictorSP(kRearRightChannel));
     // Invert the left side motors.
     // You may need to change or remove this to match your robot.
     leftDrive.setInverted(true);
@@ -103,11 +107,14 @@ public class Robot extends TimedRobot {
     switch (m_autoSelected) {
       case kCustomAuto:
         // Put custom auto code here
+        RunDrive();
         break;
       case kDefaultAuto:
       default:
         // Put default auto code here
-        m_robotDrive.Stop();
+            // Use the joystick X axis for lateral movement, Y axis for forward
+    // movement, and Z axis for rotation.
+        RunDrive();
         break;
     }
   }
@@ -119,10 +126,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // Use the joystick X axis for lateral movement, Y axis for forward
     // movement, and Z axis for rotation.
-    m_robotDrive.Update();
-    m_robotDrive.SetMoveSpeed(m_stick.getY(GenericHID.Hand.kLeft));
-    m_robotDrive.SetTurnSpeed(m_stick.getX(GenericHID.Hand.kRight));
-    m_robotDrive.SetStrafeSpeed(m_stick.getX(GenericHID.Hand.kLeft));
+    RunDrive();
   }
 
   /**
@@ -130,5 +134,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  public void RunDrive()
+  {
+    m_robotDrive.Update();
+    m_robotDrive.SetMoveSpeed(-m_stick.getX(GenericHID.Hand.kRight));
+    m_robotDrive.SetTurnSpeed(-m_stick.getY(GenericHID.Hand.kLeft)*0.75);
   }
 }
