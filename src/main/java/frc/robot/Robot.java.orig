@@ -57,8 +57,11 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
+<<<<<<< HEAD
     CameraServer.getInstance().startAutomaticCapture();
 
+=======
+>>>>>>> 4379493ff6df8be46805b35e9d24b1a22228485c
     SpeedControllerGroup leftDrive = new SpeedControllerGroup(new VictorSP(kFrontLeftChannel),  new VictorSP(kRearLeftChannel));
     SpeedControllerGroup rightDrive = new SpeedControllerGroup(new VictorSP(kFrontRightChannel), new VictorSP(kRearRightChannel));
     // Invert the left side motors.
