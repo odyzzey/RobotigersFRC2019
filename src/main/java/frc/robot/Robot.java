@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.cameraserver.CameraServer;
 
 import odyssey.lib.EasyDrive;
@@ -39,7 +40,7 @@ public class Robot extends TimedRobot {
   private static final int kJoystickChannel = 0;
 
   private EasyDrive m_robotDrive;
-  private GenericHID m_stick;
+  private XboxController m_stick;
   //private AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
 
@@ -104,14 +105,14 @@ public class Robot extends TimedRobot {
     switch (m_autoSelected) {
       case kCustomAuto:
         // Put custom auto code here
-        RunDrive();
+        CarDrive();
         break;
       case kDefaultAuto:
       default:
         // Put default auto code here
             // Use the joystick X axis for lateral movement, Y axis for forward
     // movement, and Z axis for rotation.
-        RunDrive();
+        CarDrive();
         break;
     }
   }
@@ -123,7 +124,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // Use the joystick X axis for lateral movement, Y axis for forward
     // movement, and Z axis for rotation.
-    RunDrive();
+    CarDrive();
   }
 
   /**
@@ -131,6 +132,22 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  public void CarDrive()
+  {
+    // Car drive just means the robots turning speed is dependent on the speed of the movement
+    // This would make more sense if you drove the robot
+
+    double rightStick = m_stick.getTriggerAxis(GenericHID.Hand.kRight); //Accelerate
+    double leftStick = m_stick.getTriggerAxis(GenericHID.Hand.kLeft); //"brake" slash reverse
+    double turn = m_stick.getX(GenericHID.Hand.kLeft);
+    double velocity = rightStick-leftStick;
+
+    m_robotDrive.Update();
+    m_robotDrive.SetMoveSpeed(Math.sqrt(velocity));
+    m_robotDrive.SetTurnSpeed(turn*velocity); //Speed of turn moves with the speeed of the robot
+
   }
 
   public void RunDrive()
