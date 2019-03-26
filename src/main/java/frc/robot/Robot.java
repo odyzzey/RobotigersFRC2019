@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
   private static final int kJoystickChannel = 0;
 
   private EasyDrive m_robotDrive;
-  private XboxController m_stick;
+  private Joystick m_stick;
   //private AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
 
@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    CameraServer.getInstance().startAutomaticCapture();
+   CameraServer.getInstance().startAutomaticCapture();
 
     SpeedControllerGroup leftDrive = new SpeedControllerGroup(new VictorSP(kFrontLeftChannel),  new VictorSP(kRearLeftChannel));
     SpeedControllerGroup rightDrive = new SpeedControllerGroup(new VictorSP(kFrontRightChannel), new VictorSP(kRearRightChannel));
@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
     leftDrive.setInverted(true);
 
     m_robotDrive = new EasyDrive(leftDrive, rightDrive);
-    m_stick = new XboxController(kJoystickChannel);
+    m_stick = new Joystick(kJoystickChannel);
   }
 
   /**
@@ -139,10 +139,12 @@ public class Robot extends TimedRobot {
     // Car drive just means the robots turning speed is dependent on the speed of the movement
     // This would make more sense if you drove the robot
 
-    double rightStick = m_stick.getTriggerAxis(GenericHID.Hand.kRight); //Accelerate
-    double leftStick = m_stick.getTriggerAxis(GenericHID.Hand.kLeft); //"brake" slash reverse
-    double turn = m_stick.getX(GenericHID.Hand.kLeft);
-    double velocity = rightStick-leftStick;
+    //double rightStick = m_stick.getRawAxis(5); //Accelerate
+    //double leftStick = m_stick.getRawAxis(4); //"brake" slash reverse
+    double acceleration = m_stick.getRawAxis(4);
+    //System.out.println("Right: " + rightStick + "/nLeft: " + leftStick);
+    double turn = m_stick.getRawAxis(1);
+    double velocity = acceleration;//rightStick-leftStick;
 
     m_robotDrive.Update();
     m_robotDrive.SetMoveSpeed(Math.sqrt(velocity));
