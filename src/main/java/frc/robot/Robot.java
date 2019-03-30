@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -39,8 +40,10 @@ public class Robot extends TimedRobot {
 
   private static final int kJoystickChannel = 0;
 
+  private static final int spinButton = 1;
+
   private EasyDrive m_robotDrive;
-  private Joystick m_stick;
+  private GenericHID m_stick;
   //private AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
 
@@ -55,7 +58,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-   CameraServer.getInstance().startAutomaticCapture();
+    //CameraServer.getInstance().startAutomaticCapture();
 
     SpeedControllerGroup leftDrive = new SpeedControllerGroup(new VictorSP(kFrontLeftChannel),  new VictorSP(kRearLeftChannel));
     SpeedControllerGroup rightDrive = new SpeedControllerGroup(new VictorSP(kFrontRightChannel), new VictorSP(kRearRightChannel));
@@ -64,7 +67,7 @@ public class Robot extends TimedRobot {
     leftDrive.setInverted(true);
 
     m_robotDrive = new EasyDrive(leftDrive, rightDrive);
-    m_stick = new Joystick(kJoystickChannel);
+    m_stick = new XboxController(kJoystickChannel);
   }
 
   /**
@@ -141,21 +144,38 @@ public class Robot extends TimedRobot {
 
     //double rightStick = m_stick.getRawAxis(5); //Accelerate
     //double leftStick = m_stick.getRawAxis(4); //"brake" slash reverse
-    double acceleration = m_stick.getRawAxis(4);
+    double acceleration = m_stick.getRawAxis(3) + m_stick.getRawAxis(2);
     //System.out.println("Right: " + rightStick + "/nLeft: " + leftStick);
-    double turn = m_stick.getRawAxis(1);
+    double turn = m_stick.getX(GenericHID.Hand.kLeft);
     double velocity = acceleration;//rightStick-leftStick;
 
     m_robotDrive.Update();
-    m_robotDrive.SetMoveSpeed(Math.sqrt(velocity));
-    m_robotDrive.SetTurnSpeed(turn*velocity); //Speed of turn moves with the speeed of the robot
+    if(!m_stick.getRawButton(spinButton))
+    {
+      if(velocity < 0)
+      {
+        m_robotDrive.SetMoveSpeed(-Math.pow(velocity, 2));
+      }
+      else
+      {
+        m_robotDrive.SetMoveSpeed(Math.pow(velocity, 2));
+      }
+    }
+    else
+    {
+      m_robotDrive.SetMoveSpeed(0);
+    }
+    
+    m_robotDrive.SetTurnSpeed(-turn*velocity); //Speed of turn moves with the speeed of the robot
 
   }
 
-  public void RunDrive()
+  public void ArcadeDrive()
   {
     m_robotDrive.Update();
-    m_robotDrive.SetMoveSpeed(-m_stick.getX(GenericHID.Hand.kRight));
-    m_robotDrive.SetTurnSpeed(-m_stick.getY(GenericHID.Hand.kLeft)*0.75);
+    double turn = (m_stick.getX(GenericHID.Hand.kRight));
+    double velocity = (m_stick.getY(GenericHID.Hand.kLeft));
+    m_robotDrive.SetMoveSpeed(velocity);
+    m_robotDrive.SetTurnSpeed(turn*velocity);
   }
 }
