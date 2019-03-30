@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -41,9 +42,15 @@ public class Robot extends TimedRobot {
   private static final int kJoystickChannel = 0;
 
   private static final int spinButton = 1;
+  private static final int liftButton = 6;
+  private static final int dropButton = 5;
+
+  private static boolean liftUp = false;
 
   private EasyDrive m_robotDrive;
   private GenericHID m_stick;
+  private DoubleSolenoid leftLift = new DoubleSolenoid(0, 1);
+  private DoubleSolenoid rightLift = new DoubleSolenoid(2, 3);
   //private AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
 
@@ -128,6 +135,7 @@ public class Robot extends TimedRobot {
     // Use the joystick X axis for lateral movement, Y axis for forward
     // movement, and Z axis for rotation.
     CarDrive();
+    liftCheck();
   }
 
   /**
@@ -177,5 +185,33 @@ public class Robot extends TimedRobot {
     double velocity = (m_stick.getY(GenericHID.Hand.kLeft));
     m_robotDrive.SetMoveSpeed(velocity);
     m_robotDrive.SetTurnSpeed(turn*velocity);
+  }
+
+  public void raiseLift()
+  {
+    leftLift.set(DoubleSolenoid.Value.kForward);
+    rightLift.set(DoubleSolenoid.Value.kForward);
+  }
+
+  public void dropLift()
+  {
+    //Possible this will need to be changed to reverse, depending on how soft/hard the drop is
+    leftLift.set(DoubleSolenoid.Value.kOff);
+    rightLift.set(DoubleSolenoid.Value.kOff);
+  }
+
+  public void liftCheck()// no idea what to call this method
+  {
+    if(m_stick.getRawButtonReleased(liftButton) && !liftUp)
+    {
+      liftUp = true;
+      raiseLift();
+    }
+
+    if(m_stick.getRawButtonReleased(dropButton) && liftUp)
+    {
+      liftUp = false;
+      dropLift();
+    }
   }
 }
